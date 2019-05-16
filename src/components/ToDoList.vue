@@ -21,37 +21,105 @@
       </div>
     </div>
     <br>
-        
+
     <div>
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" id="customCheck">
-        <label class="custom-control-label" for="customCheck">Excluir marcadas</label>
+      <button
+        class="btn btn-danger"
+        :disabled="!hasSelectedItem"
+        @click="deleteSelected"
+      >Excluir marcadas</button>
+    </div>
+    <br>
+
+    <div>
+      <div >
+        <ul class="list-group">
+        <li class="list-group-item active" color="secondary">Descrição</li>
+          <li
+            class="list-group-item"
+            v-for="todo in list"
+            :key="todo.id">
+            <input type="checkbox" v-model="selected" :value="todo.id">
+            {{ todo.id }} {{ todo.description }}
+          </li>
+        </ul>
       </div>
     </div>
 
-    <div>
-      
-    </div>
+    <!-- <table class="table table-dark">
+      <thead>
+        <tr>
+          <th colspan="1"></th>
+          <th>Descrição</th>
+        </tr>
+      </thead>
 
-    <p>{{ textField }}</p>
-    <p>{{ list }}</p>
+      <tbody>
+        <tr v-for="todo in list" :key="todo.id">
+          <td><input type="checkbox" v-model="selected" :value="todo.id"></td>
+          <td>{{ todo.id }} {{ todo.description }}</td>
+        </tr>
+      </tbody>
+    </table> -->
+
+    <br>
+    <p>{{ selected }}</p>
+    <p>{{ hasSelectedItem ? 'true' : 'false' }}</p>
   </div>
 </template>
 
 <script>
+import ToDo from "../models/ToDo";
+
 export default {
   data() {
     return {
-      textField: '',
-      list: []
+      textField: "",
+      list: [],
+      show: false,
+      selected: []
     };
   },
+  computed: {
+    hasSelectedItem() {
+      return this.selected.length > 0;
+    }
+  },
   methods: {
-    addItem() {
-      this.list.push(this.textField);
-    },
-    deleteItem() {
+    isValid(item) {
+      const isRepeated =
+        this.list.filter(i => {
+          return i.description === item.description;
+        }).length > 0;
 
+      return !isRepeated;
+    },
+    addItem() {
+      const newItem = new ToDo({
+        id: Date.now(),
+        description: this.textField
+      });
+      const isValid = this.isValid(newItem);
+
+      if (!isValid) {
+        alert("Tem valor repetido!");
+        return;
+      }
+
+      this.list.push(newItem);
+    },
+    deleteSelected() {
+      this.list = this.list.filter(todo => {
+        return !this.selected.includes(todo.id);
+      });
+      this.selected = [];
+    },
+    isEmpty() {
+      if (list.length == 0) {
+        this.show = false;
+      } else {
+        this.show = true;
+      }
     }
   },
   name: "ToDoList"
@@ -59,5 +127,4 @@ export default {
 </script>
 
 <style>
-
 </style>
