@@ -42,5 +42,9 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ]
+  ],
+  "main": "index.js",
+  "repository": "git@github.com:GuiBalestra/to-do-list.git",
+  "author": "Guilherme <gb-ol@hotmail.com>",
+  "license": "MIT"
 }
