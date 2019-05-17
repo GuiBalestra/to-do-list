@@ -32,13 +32,10 @@
     <br>
 
     <div>
-      <div >
+      <div>
         <ul class="list-group">
-        <li class="list-group-item active" color="secondary">Descrição</li>
-          <li
-            class="list-group-item"
-            v-for="todo in list"
-            :key="todo.id">
+          <li class="list-group-item active">Descrição</li>
+          <li class="list-group-item" v-for="todo in list" :key="todo.id">
             <input type="checkbox" v-model="selected" :value="todo.id">
             {{ todo.id }} {{ todo.description }}
           </li>
@@ -60,11 +57,16 @@
           <td>{{ todo.id }} {{ todo.description }}</td>
         </tr>
       </tbody>
-    </table> -->
+    </table>-->
 
     <br>
-    <p>{{ selected }}</p>
+    <button class="btn btn-secondary" @click="fetchData">Ver Dados</button>
+    <!-- <p>{{ selected }}</p>
     <p>{{ hasSelectedItem ? 'true' : 'false' }}</p>
+
+    <div class="alert alert-success" role="alert" v-show="false"> 
+      <p>Task salva com sucesso!</p>  
+    </div>-->
   </div>
 </template>
 
@@ -76,8 +78,8 @@ export default {
     return {
       textField: "",
       list: [],
-      show: false,
-      selected: []
+      selected: [],
+      requestedItems: []
     };
   },
   computed: {
@@ -107,20 +109,38 @@ export default {
       }
 
       this.list.push(newItem);
+
+      this.$http
+        .post("https://vuejs-http-ca04c.firebaseio.com/data.json", newItem)
+        .then(
+          response => {
+            console.log(response);
+          },
+          error => {
+            console.log(error);
+          }
+        );
     },
     deleteSelected() {
       this.list = this.list.filter(todo => {
         return !this.selected.includes(todo.id);
       });
       this.selected = [];
-    },
-    isEmpty() {
-      if (list.length == 0) {
-        this.show = false;
-      } else {
-        this.show = true;
-      }
     }
+  },
+  fetchData() {
+    this.$http
+      .get("https://vuejs-http-ca04c.firebaseio.com/data.json")
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        const resultArray = [];
+        for (let key in data) {
+          resultArray.push(data[key]);
+        }
+        this.requestedItems = resultArray;
+      });
   },
   name: "ToDoList"
 };
