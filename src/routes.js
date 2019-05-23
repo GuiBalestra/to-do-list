@@ -1,9 +1,20 @@
-import Description from "./components/Description.vue";
+import CreateToDo from './components/CreateToDo.vue';
+import ToDoList from "./components/ToDoList.vue";
 
-export const routes = [ 
+export const routes = [
     {
-        path: '/description', name: 'description', components: {
-            default: Description
-        }
+        path: '/',
+        name: 'ToDoList', 
+        component: ToDoList,
+    },
+    {
+        path: '/todo',
+        name: 'ToDoList', 
+        component: ToDoList,
+    },
+    {
+        path: '/todo/create',
+        name: 'CreateToDo', 
+        component: CreateToDo,
     }
 ]

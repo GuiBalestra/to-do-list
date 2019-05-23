@@ -1,56 +1,52 @@
 <template>
   <div class="container">
-    <div class="row">
-      <div class="col-md-6">
-        <div class="form-group">
-          <label>Descrição</label>
-          <div class="input-group">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Ex.: Escovar os dentes"
-              v-model="textField"
-            >
+    <h1>Lista de ToDos</h1>
 
-            <div class="input-group-append">
-              <button type="button" class="btn btn-secondary" @click="addItem">+</button>
-            </div>
-          </div>
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <button class="btn btn-primary" @click="navigateToCreate">Adicionar ToDo</button>
         </div>
       </div>
     </div>
-    <br>
 
-    <br>
-
-    <!-- <button class="btn btn-secondary" @click="fetchData">Ver Dados</button>
-    <ul class="list-group">
-      <li
-        class="list-group-item"
-        v-for="request in requestedItems"
-        :key="request.id"
-      >{{ request }}li></li>
-    </ul> -->
-
-    <!-- <p>{{ selected }}</p>
-    <p>{{ hasSelectedItem ? 'true' : 'false' }}</p>
-
-    <div class="alert alert-success" role="alert" v-show="false"> 
-      <p>Task salva com sucesso!</p>  
-    </div>-->
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <button
+            class="btn btn-danger"
+            :disabled="!hasSelectedItem"
+            @click="deleteSelected"
+          >Excluir marcadas</button>
+          <br>
+          <br>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="todo in toDos" :key="todo.id">
+                <td>{{ todo.id }}</td>
+                <td>{{ todo.description }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import ToDo from "../models/ToDo";
-
 export default {
+  name: "ToDotoDos",
   data() {
     return {
-      textField: "",
-      list: [],
-      selected: [],
-      requestedItems: []
+      toDos: [],
+      selected: []
     };
   },
   computed: {
@@ -59,61 +55,37 @@ export default {
     }
   },
   methods: {
-    isValid(item) {
-      const isRepeated =
-        this.list.filter(i => {
-          return i.description === item.description;
-        }).length > 0;
-
-      return !isRepeated;
-    },
-    addItem() {
-      const newItem = new ToDo({
-        id: Date.now(),
-        description: this.textField
-      });
-      const isValid = this.isValid(newItem);
-
-      if (!isValid) {
-        alert("Tem valor repetido!");
-        return;
-      }
-
-      this.list.push(newItem);
-
-      this.$http
-        .post("https://vuejs-http-ca04c.firebaseio.com/data.json", newItem)
-        .then(
-          response => {
-            console.log(response);
-          },
-          error => {
-            console.log(error);
-          }
-        );
+    navigateToCreate() {
+      this.$router.replace({ name: "CreateToDo" });
     },
     deleteSelected() {
-      this.list = this.list.filter(todo => {
-        return !this.selected.includes(todo.id);
-      });
+      // apagar os selecionados no firebase.
+      this.$http.delete
+      
       this.selected = [];
+      this.fetchToDos();      
+    },
+    fetchToDos() {
+      // buscar no firebase os toDos e jogar no this.toDos
+      // fetchData() {
+        // this.$http
+        //   .get("https://vuejs-http-ca04c.firebaseio.com/toDos.json")
+        //   .then(response => {
+        //     return response.json();
+        //   })
+        //   .then(data => {
+        //     const resultArray = [];
+        //     for (let key in data) {
+        //       resultArray.push(data[key]);
+        //     }
+        //     this.requestedItems = resultArray;
+        //   });
     }
   },
-  fetchData() {
-    this.$http
-      .get("https://vuejs-http-ca04c.firebaseio.com/data.json")
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        const resultArray = [];
-        for (let key in data) {
-          resultArray.push(data[key]);
-        }
-        this.requestedItems = resultArray;
-      });
+
+  beforeMount() {
+    this.fetchToDos();
   },
-  name: "ToDoList"
 };
 </script>
 
