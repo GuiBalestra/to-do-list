@@ -46,7 +46,8 @@ export default {
   data() {
     return {
       toDos: [],
-      selected: []
+      selected: [],
+      firebase: 'https://vuejs-http-ca04c.firebaseio.com/toDos.json'
     };
   },
   computed: {
@@ -67,7 +68,7 @@ export default {
     fetchToDos() {
       // buscar no firebase os toDos e jogar no this.toDos
       this.$http
-        .get("https://vuejs-http-ca04c.firebaseio.com/toDos.json")
+        .get(this.firebase)
         .then(response => {
           return response.json();
         })

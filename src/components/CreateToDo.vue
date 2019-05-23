@@ -28,7 +28,7 @@ export default {
   name: "CreateToDo",
   data: () => ({
     todo: new ToDo(),
-    database: 'https://vuejs-http-ca04c.firebaseio.com/toDos.json'
+    firebase: 'https://vuejs-http-ca04c.firebaseio.com/toDos.json'
   }),
   methods: {
       reset() {
@@ -38,7 +38,7 @@ export default {
       save() {
           // salvar o this.todo no firebase e se der certo, resetar.
             this.$http
-            .post(this.database, this.todo)
+            .post(this.firebase, this.todo)
             .then(
               response => {
                 console.log(response);
