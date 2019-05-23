@@ -60,32 +60,29 @@ export default {
     },
     deleteSelected() {
       // apagar os selecionados no firebase.
-      this.$http.delete
-      
+
       this.selected = [];
-      this.fetchToDos();      
+      this.fetchToDos();
     },
     fetchToDos() {
       // buscar no firebase os toDos e jogar no this.toDos
-      // fetchData() {
-        // this.$http
-        //   .get("https://vuejs-http-ca04c.firebaseio.com/toDos.json")
-        //   .then(response => {
-        //     return response.json();
-        //   })
-        //   .then(data => {
-        //     const resultArray = [];
-        //     for (let key in data) {
-        //       resultArray.push(data[key]);
-        //     }
-        //     this.requestedItems = resultArray;
-        //   });
+      this.$http
+        .get("https://vuejs-http-ca04c.firebaseio.com/toDos.json")
+        .then(response => {
+          return response.json();
+        })
+        .then(data => {
+          const resultArray = [];
+          for (let key in data) {
+            resultArray.push(data[key]);
+          }
+          this.toDos = resultArray;
+        });
     }
   },
-
   beforeMount() {
     this.fetchToDos();
-  },
+  }
 };
 </script>
 
