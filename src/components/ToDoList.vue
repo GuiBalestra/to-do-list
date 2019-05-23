@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <h1>To Do List</h1>
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
@@ -22,45 +21,17 @@
     </div>
     <br>
 
-    <div>
-      <button
-        class="btn btn-danger"
-        :disabled="!hasSelectedItem"
-        @click="deleteSelected"
-      >Excluir marcadas</button>
-    </div>
     <br>
 
-    <div>
-      <div>
-        <ul class="list-group">
-          <li class="list-group-item active">Descrição</li>
-          <li class="list-group-item" v-for="todo in list" :key="todo.id">
-            <input type="checkbox" v-model="selected" :value="todo.id">
-            {{ todo.id }} {{ todo.description }}
-          </li>
-        </ul>
-      </div>
-    </div>
+    <!-- <button class="btn btn-secondary" @click="fetchData">Ver Dados</button>
+    <ul class="list-group">
+      <li
+        class="list-group-item"
+        v-for="request in requestedItems"
+        :key="request.id"
+      >{{ request }}li></li>
+    </ul> -->
 
-    <!-- <table class="table table-dark">
-      <thead>
-        <tr>
-          <th colspan="1"></th>
-          <th>Descrição</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr v-for="todo in list" :key="todo.id">
-          <td><input type="checkbox" v-model="selected" :value="todo.id"></td>
-          <td>{{ todo.id }} {{ todo.description }}</td>
-        </tr>
-      </tbody>
-    </table>-->
-
-    <br>
-    <button class="btn btn-secondary" @click="fetchData">Ver Dados</button>
     <!-- <p>{{ selected }}</p>
     <p>{{ hasSelectedItem ? 'true' : 'false' }}</p>
 
