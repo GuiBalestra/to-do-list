@@ -29,7 +29,7 @@
             </thead>
             <tbody>
               <tr v-for="todo in toDos" :key="todo.id">
-                <td>{{ todo.id }}</td>
+                <td> <input type="checkbox" :value="todo.id" v-model="selected"> {{ todo.id }}</td>
                 <td>{{ todo.description }}</td>
               </tr>
             </tbody>
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import ToDo from "../models/ToDo";
 export default {
   name: "ToDotoDos",
   data() {
@@ -75,7 +76,7 @@ export default {
         .then(data => {
           const resultArray = [];
           for (let key in data) {
-            resultArray.push(data[key]);
+            resultArray.push(new ToDo({ id: key, description: data[key].description }) );
           }
           this.toDos = resultArray;
         });
